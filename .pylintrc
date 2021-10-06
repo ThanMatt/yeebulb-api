@@ -1,0 +1,5 @@
+[DEFAULT]
+string-quote=single
+triple-quote=double
+indent-string="  "
+disable=C0114, C0116, C0103

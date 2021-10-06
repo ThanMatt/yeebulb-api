@@ -1,7 +1,7 @@
+import logging
 from flask import Flask, request, jsonify
 from yeelight import Bulb, BulbException
-import logging
-
+from werkzeug import exceptions
 
 app = Flask(__name__)
 logger = logging.getLogger('werkzeug')
@@ -9,7 +9,12 @@ logger = logging.getLogger('werkzeug')
 @app.errorhandler(Exception)
 def api_error(error):
   logger.exception(error)
-  return "API error", 500
+  return 'API error', 500
+
+@app.errorhandler(exceptions.NotFound)
+def not_found(error):
+  logger.exception(error)
+  return '404 Not found', 404
 
 @app.errorhandler(BulbException)
 def bulb_error(error):
@@ -25,7 +30,6 @@ def hello_world():
     return jsonify(
       ip=bulb_ip
     )
-  else:
-    return jsonify(
-      ip="wala"
-    )
+  return jsonify(
+    ip='wala'
+  )
